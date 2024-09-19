@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Google Places API Business Search</title>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCD_YdGR_LqL3dQHFwl2rcn8LycdGxsHEs&libraries=places"></script>
+  <style>
+      label {
+          display: block;
+          margin-top: 10px;
+      }
+  </style>
+</head>
+<body>
+  <h1>Business Search</h1>
+
+  <label for="business-name">Search Business Name:</label>
+  <input id="business-name" style="width:500px;" type="text" placeholder="Enter business name" />
+
+  <label for="business-address">Address:</label>
+  <input id="business-address" type="text" readonly />
+
+  <label for="business-phone">Phone Number:</label>
+  <input id="business-phone" type="text" readonly />
+
+  <label for="business-website">Website:</label>
+  <input id="business-website" type="text" readonly />
+
+  <script>
+    // Initialize Google Places API Autocomplete
+    function initAutocomplete() {
+      var input = document.getElementById('business-name');
+      var autocomplete = new google.maps.places.Autocomplete(input);
+
+      // Specify what data we want to get
+      autocomplete.setFields(['place_id', 'name', 'formatted_address', 'formatted_phone_number', 'website']);
+
+      // When the user selects a business, fill in the address and details
+      autocomplete.addListener('place_changed', function () {
+        var place = autocomplete.getPlace();
+
+        if (!place.place_id) {
+          return;
+        }
+
+        // Fill in the business details
+        document.getElementById('business-address').value = place.formatted_address || 'N/A';
+        document.getElementById('business-phone').value = place.formatted_phone_number || 'N/A';
+        document.getElementById('business-website').value = place.website || 'N/A';
+      });
+    }
+
+    // Initialize the autocomplete when the page loads
+    window.onload = initAutocomplete;
+  </script>
+</body>
+</html>
